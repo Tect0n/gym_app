@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+ 
 
 
-// Use MyClass in your code
 
 void main() {
   runApp(MyApp());
@@ -30,9 +30,6 @@ class MyApp extends StatelessWidget {
 class MainApp extends StatelessWidget {
   MainApp({Key? key}) : super(key: key);
   final List<Workout> workouts = [];
-  
-  
-  
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +52,7 @@ class MainApp extends StatelessWidget {
           children : [ 
             SizedBox(height: 16,),
 
-            
-      
+            // The following code creates a date and time picker
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: MaterialButton(
@@ -92,7 +88,7 @@ class MainApp extends StatelessWidget {
                     ),
             ),
       
-            
+          // The following code creates the text fields for the workouts
       
             Text("1. Bench Press : "),
       
@@ -155,11 +151,23 @@ class MainApp extends StatelessWidget {
               ),
             ),
 
+
+            // The following code creates the add workout button
+            
             Builder(builder: (context) => ElevatedButton(
               style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Colors.black26)),
               onPressed: () {
                 final workout = Workout(benchpress: _benchpress.text, inclinepress: _inclinepress.text, chestflies: _chestflies.text, dips: _dips.text, tripull: _tripulldown.text, skullcrush: _skullcrush.text);
-                workouts.add(workout); // Add the new workout to the list
+                workouts.add(workout);
+
+                print(workouts);
+
+                if (workouts.length > 1) {
+                    print(workouts[1].benchpress);
+                  };
+                    
+                  
+                 // Add the new workout to the list
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => NewPage(workout: workout,)),
@@ -178,7 +186,7 @@ class MainApp extends StatelessWidget {
   }
 }
 
-
+// The following class creates workout objects
 class Workout {
   final String benchpress;
   final String inclinepress;
@@ -195,15 +203,18 @@ class Workout {
     required this.tripull,
     required this.skullcrush,
   });
-
+/*
   @override
   String toString() {
     return 'Workout(benchpress: $benchpress, inclinepress: $inclinepress, chestflies: $chestflies, dips: $dips, tripull: $tripull, skullcrush: $skullcrush)';
-  }
+  } */
 
 }
 
-
+/* Doc1 So, everytime a new page is created, the latest object is passed to the new page.
+What we want is to pass the entire list of objects to the new page, and then
+perform the buildWorkoutWidget function on each object in the list.
+*/
 
 
 class NewPage extends StatelessWidget {
@@ -213,8 +224,7 @@ class NewPage extends StatelessWidget {
       : super(key: key);
 
 
-
-
+      // The following function creates workout boxes
       Widget buildWorkoutWidget(Workout workout) {
         return Center(
           child: Column(
@@ -248,7 +258,7 @@ class NewPage extends StatelessWidget {
 
 
 
-
+  // The following function creates the new page
   @override
   Widget build(BuildContext context) {
     return Theme(
