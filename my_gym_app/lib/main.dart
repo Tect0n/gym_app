@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
  
 
-
-
 void main() {
   runApp(MyApp());
 }
@@ -10,8 +8,6 @@ void main() {
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : workouts = [], super(key: key);
   final List<Workout> workouts;
-  
-
   
 
   @override
@@ -80,6 +76,7 @@ class MainApp extends StatelessWidget {
                   }
                 }
               },
+
               child: const Text(
                 "Choose a date and time",
                 style: TextStyle(color: Colors.white),
@@ -157,6 +154,7 @@ class MainApp extends StatelessWidget {
             Builder(builder: (context) => ElevatedButton(
               style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Colors.black26)),
               onPressed: () {
+                // Workout object is created based on the data written
                 final workout = Workout(benchpress: _benchpress.text, inclinepress: _inclinepress.text, chestflies: _chestflies.text, dips: _dips.text, tripull: _tripulldown.text, skullcrush: _skullcrush.text);
                 workouts.add(workout);
 
@@ -170,7 +168,7 @@ class MainApp extends StatelessWidget {
                  // Add the new workout to the list
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => NewPage(workout: workout,)),
+                  MaterialPageRoute(builder: (context) => WorkoutPage(workouts: workouts,)),
                 );
               },
               child: Text('Add Workout'),
@@ -211,17 +209,22 @@ class Workout {
 
 }
 
-/* Doc1 So, everytime a new page is created, the latest object is passed to the new page.
+/*
+ Doc1 So, everytime a new page is created, the latest object is passed to the new page.
 What we want is to pass the entire list of objects to the new page, and then
 perform the buildWorkoutWidget function on each object in the list.
 */
 
 
-class NewPage extends StatelessWidget {
-  final workout;
 
-  const NewPage({Key? key, required this.workout})
+class WorkoutPage extends StatelessWidget {
+  final workouts;
+
+  const WorkoutPage({Key? key, required this.workouts})
       : super(key: key);
+
+      // Workout boxes are created here, there for we need to extract the workout
+      // items from the list of workouts over here
 
 
       // The following function creates workout boxes
@@ -257,19 +260,26 @@ class NewPage extends StatelessWidget {
       }
 
 
-
-  // The following function creates the new page
+// The following function creates the new page
   @override
   Widget build(BuildContext context) {
     return Theme(
       data: ThemeData(
         brightness: Brightness.dark,
       ),
+
+
+      
       child: Scaffold(
         appBar: AppBar(
           title: Text('Stored workouts'),
         ),
-        body: buildWorkoutWidget(workout),
+        body: ListView.builder(
+          itemCount: workouts.length,
+          itemBuilder: (BuildContext context, int index) {
+            return buildWorkoutWidget(workouts[index]);
+          },
+        )
       ),
     );
   }
