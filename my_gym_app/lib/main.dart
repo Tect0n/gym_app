@@ -9,6 +9,8 @@ class MyApp extends StatelessWidget {
   MyApp({Key? key}) : workouts = [], super(key: key);
   final List<Workout> workouts;
   
+  
+  
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +28,8 @@ class MyApp extends StatelessWidget {
 class MainApp extends StatelessWidget {
   MainApp({Key? key}) : super(key: key);
   final List<Workout> workouts = [];
+  int count = 0;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -144,31 +148,30 @@ class MainApp extends StatelessWidget {
               width: 200,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: TextField(controller: _skullcrush, decoration: InputDecoration(hintText: "Number of Reps", labelText: "6. Skull Crushers")),
+                child: TextField(controller: _skullcrush, decoration: InputDecoration(hintText: "Number of Reps", labelText: "Number of Reps")),
               ),
             ),
 
+            
+
+           
 
             // The following code creates the add workout button
             
             Builder(builder: (context) => ElevatedButton(
               style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Colors.black26)),
               onPressed: () {
+                
                 // Workout object is created based on the data written
                 final workout = Workout(benchpress: _benchpress.text, inclinepress: _inclinepress.text, chestflies: _chestflies.text, dips: _dips.text, tripull: _tripulldown.text, skullcrush: _skullcrush.text);
                 workouts.add(workout);
 
-                print(workouts);
 
-                if (workouts.length > 1) {
-                    print(workouts[1].benchpress);
-                  };
-                    
                   
                  // Add the new workout to the list
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => WorkoutPage(workouts: workouts,)),
+                  MaterialPageRoute(builder: (context) => WorkoutPage(workouts: workouts, count: count,)),
                 );
               },
               child: Text('Add Workout'),
@@ -220,7 +223,7 @@ perform the buildWorkoutWidget function on each object in the list.
 class WorkoutPage extends StatelessWidget {
   final workouts;
 
-  const WorkoutPage({Key? key, required this.workouts})
+  const WorkoutPage({Key? key, required this.workouts, required count})
       : super(key: key);
 
       // Workout boxes are created here, there for we need to extract the workout
@@ -228,7 +231,7 @@ class WorkoutPage extends StatelessWidget {
 
 
       // The following function creates workout boxes
-      Widget buildWorkoutWidget(Workout workout) {
+      Widget buildWorkoutWidget(Workout workout, int index) {
         return Center(
           child: Column(
             children: [
@@ -242,7 +245,7 @@ class WorkoutPage extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      Text('Workout'),
+                      Text('Workout number ${index + 1}', style: TextStyle(decoration: TextDecoration.underline)),
                       Text("${workout.benchpress} : Benchpress", textAlign: TextAlign.left),
                       Text("${workout.inclinepress} : Inclinepress", textAlign: TextAlign.right),
                       Text("${workout.chestflies} : Chest flies", textAlign: TextAlign.right),
@@ -277,18 +280,12 @@ class WorkoutPage extends StatelessWidget {
         body: ListView.builder(
           itemCount: workouts.length,
           itemBuilder: (BuildContext context, int index) {
-            return buildWorkoutWidget(workouts[index]);
+            return buildWorkoutWidget(workouts[index], index);
           },
         )
       ),
     );
   }
 }
-
-
-
-
-
-
 
 
